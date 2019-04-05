@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> user.name 's Blog</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+    {% endblock %}
+</head>    
+<body>
+    {% for message in get_flashed_messages() %}
+        <div class="alert">{{ message }}</div>
+    {% endfor %}
+    <h2>
+        <img alt="Avatar" class="avatar" src="{{ url_for('static', filename='images/litte_red_hat.jpg') }}">
+         user.name 's Blog
+    </h2>
+    <nav>
+
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    
+    <footer>
+        <small>&copy; 2019 <a href="{{ url_for('index') }}">Re0-Blog</a></small>
+    </footer>
+</body>
+</html>
