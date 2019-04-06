@@ -18,6 +18,9 @@ class Role(db.Model):
     permissions = db.Column(db.Integer)
     user = db.relationship('User', backref='role', lazy='dynamic')
 
+    def __repr__(self):
+        return '<Role %r>' % self.name
+
     @staticmethod
     def insert_roles():
         roles = {
@@ -46,6 +49,9 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+
+    def __repr__(self):
+        return '<User %r>' % self.username
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
