@@ -12,7 +12,7 @@ class Permission:
     ADMINISTER = 0x80
 
 class Role(db.Model):
-    id = db.Column(db.Interger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
@@ -40,7 +40,7 @@ class Role(db.Model):
         db.session.commit()
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Interger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
@@ -52,7 +52,7 @@ class User(UserMixin, db.Model):
         if self.role is None:
             if self.email == current_app.config['FLASKY_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
-            if self.role is None:
+            else:
                 self.role = Role.query.filter_by(default=True).first()
 
     # def generate_confirmation_token(self, expiration=3600):

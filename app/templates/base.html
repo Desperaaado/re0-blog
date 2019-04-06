@@ -1,31 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% block head %}
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> user.name 's Blog</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
-    {% endblock %}
-</head>    
-<body>
-    {% for message in get_flashed_messages() %}
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Re0-Blog{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+            data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Re0-Blog</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <!-- {% for message in get_flashed_messages() %}
         <div class="alert">{{ message }}</div>
-    {% endfor %}
-    <h2>
-        <img alt="Avatar" class="avatar" src="{{ url_for('static', filename='images/litte_red_hat.jpg') }}">
-         user.name 's Blog
-    </h2>
-    <nav>
-
-    </nav>
-
-    {% block content %}{% endblock %}
-
-    
-    <footer>
+    {% endfor %} -->
+    <div class="container">
+        {% block page_content %}{% endblock %}
+    </div>
+    <!-- <footer>
         <small>&copy; 2019 <a href="{{ url_for('index') }}">Re0-Blog</a></small>
-    </footer>
-</body>
-</html>
+    </footer> -->
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}"
+type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.png') }}"
+type="image/x-icon">
+{% endblock %}
