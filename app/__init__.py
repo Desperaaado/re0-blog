@@ -4,6 +4,7 @@ from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['FLASKY_ADMIN'] = 'xiao0yu0xiang0@qq.com' #!! from $env
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
