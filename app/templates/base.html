@@ -18,6 +18,14 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
+
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Sign In</a></li>
+                    {% endif %}
+                </ul>
             </ul>
         </div>
     </div>
@@ -25,11 +33,16 @@
 {% endblock %}
 
 {% block content %}
-    <!-- {% for message in get_flashed_messages() %}
-        <div class="alert">{{ message }}</div>
-    {% endfor %} -->
-    <div class="container">
-        {% block page_content %}{% endblock %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+
     </div>
     <!-- <footer>
         <small>&copy; 2019 <a href="{{ url_for('index') }}">Re0-Blog</a></small>

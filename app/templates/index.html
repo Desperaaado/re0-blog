@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
-    <img alt="ChiKa: fighting!" class="chika" src="{{ url_for('static', filename='images/chika.gif') }}">
+{{ super() }}
+<img alt="ChiKa: fighting!" class="chika" src="{{ url_for('static', filename='images/chika.gif') }}">
 {% endblock %}
