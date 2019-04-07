@@ -2,6 +2,7 @@ from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from datetime import datetime
 from app import db, login_manager
 
 @login_manager.user_loader
@@ -53,6 +54,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    post = db.relationship('Post', backref='author', lazy='dynamic')
+
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -92,20 +95,26 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-#     def can(self, permissions):
-#         return self.role is not None and \
-#             (self.role.permissions & permissions) == permissions
+    def can(self, permissions):
+        return self.role is not None and \
+            (self.role.permissions & permissions) == permissions
 
-#     def is_administrator(self):
-#         return self.can(Permission.ADMINISTER)
+    def is_administrator(self):
+        return self.can(Permission.ADMINISTER)
 
-# class AnonymousUser(AnonymousUserMixin):
+class AnonymousUser(AnonymousUserMixin):
 
-#     def can(self, permissions):
-#         return False
+    def can(self, permissions):
+        return False
 
-#     def is_administrator(self):
-#         return False
+    def is_administrator(self):
+        return False
 
 
-# login_manager.anonymous_user = AnonymousUser
+login_manager.anonymous_user = AnonymousUser
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))

@@ -14,4 +14,9 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 bootstrap = Bootstrap(app)
 
+@app.context_processor
+def inject_permissions():
+    from app.models import Permission
+    return dict(Permission=Permission)
+
 from app import views

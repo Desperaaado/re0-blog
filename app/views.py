@@ -1,12 +1,21 @@
 from flask import render_template, url_for, flash, redirect, request
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from app import app, db
-from app.models import User
-from app.forms import RegistrationForm, LoginForm
+from app.models import User, Permission, Post
+from app.forms import RegistrationForm, LoginForm, PostForm
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    form = PostForm()
+    if current_user.can(Permission.WRITE_ARTICLES) and \
+            form.validate_on_submit():
+        post = Post(body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('index'))
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', form=form, posts=posts)
 
 @app.route('/logout')
 def logout():

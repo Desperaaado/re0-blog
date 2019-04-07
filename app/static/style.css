@@ -1,126 +1,113 @@
-body {
-    margin: auto;
-    max-width: 580px;
-    font-size: 14px;
-    font-family: Helvetica, Arial, sans-serif;
-}
-
-footer {
-    color: #888;
-    margin-top: 15px;
-    text-align: center;
-    padding: 10px;
-}
-
-.avatar {
-    width: 40px;
-}
-
-.movie-list {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-}
-
-.movie-list li {
-    padding: 12px 24px;
-    border-bottom: 1px solid #ddd;
-}
-
-.movie-list li:last-child {
-    border-bottom: none;
-}
-
-.movie-list li:hover {
-    background-color: #f8f9fa;
-}
-
 .chika {
     display: block;
     margin: 0 auto;
     height: 200px;
 }
 
-nav ul {
+.profile-thumbnail {
+    position: absolute;
+}
+.profile-header {
+    min-height: 260px;
+    margin-left: 280px;
+}
+div.post-tabs {
+    margin-top: 16px;
+}
+ul.posts {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
+    padding: 0px;
+    margin: 16px 0px 0px 0px;
+    border-top: 1px solid #e0e0e0;
 }
-
-nav li {
-    float: left;
-} 
-
-nav li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 8px 12px;
-    text-decoration: none;
-} 
-
-nav li a:hover {
-    background-color: #111;
+div.post-tabs ul.posts {
+    margin: 0px;
+    border-top: none;
 }
-
-.float-right {
+ul.posts li.post {
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+ul.posts li.post:hover {
+    background-color: #f0f0f0;
+}
+div.post-date {
     float: right;
 }
-
-.imdb {
-    font-size: 12px;
+div.post-author {
     font-weight: bold;
-    color: black;
-    text-decoration: none;
-    background: #F5C518;
-    border-radius: 5px;
-    padding: 3px 5px;
 }
-
-.alert {
-    position: relative;
-    padding: 7px;
-    margin: 7px 0;
-    border: 1px solid transparent;
-    color: #004085;
-    background-color: #cce5ff;
-    border-color: #b8daff;
-    border-radius: 5px;
+div.post-thumbnail {
+    position: absolute;
 }
-
-input[type=submit] {
-    font-family: inherit;
-} 
-
-input[type=text] {
-    border: 1px solid #ddd;
-} 
-
-input[name=year] {
-    width: 50px;
-} 
-
-.btn {
-    font-size: 12px;
-    padding: 3px 5px;
-    text-decoration: none;
-    cursor: pointer;
-    background-color: white;
-    color: black;
-    border: 1px solid #555555;
-    border-radius: 5px;
-} 
-
-.btn:hover {
-    text-decoration: none;
-    background-color: black;
-    color: white;
-    border: 1px solid black;
+div.post-content {
+    margin-left: 48px;
+    min-height: 48px;
 }
-
-.inline-form {
-    display: inline;
+div.post-footer {
+    text-align: right;
+}
+ul.comments {
+    list-style-type: none;
+    padding: 0px;
+    margin: 16px 0px 0px 0px;
+}
+ul.comments li.comment {
+    margin-left: 32px;
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+ul.comments li.comment:nth-child(1) {
+    border-top: 1px solid #e0e0e0;
+}
+ul.comments li.comment:hover {
+    background-color: #f0f0f0;
+}
+div.comment-date {
+    float: right;
+}
+div.comment-author {
+    font-weight: bold;
+}
+div.comment-thumbnail {
+    position: absolute;
+}
+div.comment-content {
+    margin-left: 48px;
+    min-height: 48px;
+}
+div.comment-form {
+    margin: 16px 0px 16px 32px;
+}
+div.pagination {
+    width: 100%;
+    text-align: right;
+    padding: 0px;
+    margin: 0px;
+}
+div.flask-pagedown-preview {
+    margin: 10px 0px 10px 0px;
+    border: 1px solid #e0e0e0;
+    padding: 4px;
+}
+div.flask-pagedown-preview h1 {
+    font-size: 140%;
+}
+div.flask-pagedown-preview h2 {
+    font-size: 130%;
+}
+div.flask-pagedown-preview h3 {
+    font-size: 120%;
+}
+.post-body h1 {
+    font-size: 140%;
+}
+.post-body h2 {
+    font-size: 130%;
+}
+.post-body h3 {
+    font-size: 120%;
+}
+.table.followers tr {
+    border-bottom: 1px solid #e0e0e0;
 }
