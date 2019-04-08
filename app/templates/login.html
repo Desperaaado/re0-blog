@@ -5,4 +5,10 @@
 
 {% block page_content %}
     {{ wtf.quick_form(form) }}
+    <p>
+        New user?
+        <a href="{{ url_for('register') }}">
+            Click here to register
+        </a>
+    </p>
 {% endblock %}

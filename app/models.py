@@ -79,7 +79,7 @@ class User(UserMixin, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
-            if self.email == current_app.config['FLASKY_ADMIN']:
+            if self.email == current_app.config['RE0BLOG_ADMIN']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
             else:
                 self.role = Role.query.filter_by(default=True).first()
@@ -104,21 +104,29 @@ class User(UserMixin, db.Model):
         return self.followers.filter_by(
             follower_id=user.id).first() is not None
 
-    # def generate_confirmation_token(self, expiration=3600):
-    #     s = Serializer(current_app.config['SECRET_KEY'], expiration)
-    #     return s.dumps({'confirm': self.id}) #?? dumps
+    def generate_confirmation_token(self, expiration=3600):
+        # s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'confirm': self.id})
 
-    # def confirm(self, token):
-    #     s = Serializer(current_app.config['SECRET_KEY'])
-    #     try:
-    #         data = s.loads(token)
-    #     except:
-    #         return False
-    #     if data.get('confirm') != self.id:
-    #         return False
-    #     self.confirmed = True
-    #     db.session.add(self)
-    #     return True
+    def confirm(self, token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        tokenn = s.dumps({'confirm': self.id})
+        print('>>>>s21tokennnn: ', tokenn)
+        print('>>>>s21token: ', token)
+        data = s.loads(token)
+        # try:
+        #     data = s.loads(token)
+        #     print(">>>data: ", data)
+        # except:
+        #     print('??????why!!!')
+        #     return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        db.session.commit()
+        return True
 
     @property
     def password(self):

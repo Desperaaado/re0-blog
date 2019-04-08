@@ -1,0 +1,10 @@
+Dear {{ user.username }},
+
+    Welcome to Re0-Blog!
+    To confirm your account please click on the following link:
+    {{ url_for('confirm', token=token, _external=True) }}
+
+Sincerely,
+The Re0-Blog Team
+
+Note: replies to this email address are not monitored.

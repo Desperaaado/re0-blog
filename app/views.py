@@ -1,8 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request
-from flask_login import login_user, logout_user, current_user
+from flask_login import (login_user, 
+    logout_user, current_user, login_required)
 from app import app, db
 from app.models import User, Permission, Post
 from app.forms import RegistrationForm, LoginForm, PostForm
+from app.email import send_email
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -45,6 +47,25 @@ def register():
                     password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('You can now login.')
-        return redirect(url_for('login'))
+        login_user(user) # Automatic login after registration
+        token = user.generate_confirmation_token()
+        send_email(user.email, 
+                   'Confirm Your Account',
+                   'auth/email/confirm', 
+                   user=user, 
+                   token=token)
+        flash('A confirmation email has been sent to you by email.')
+        return redirect(url_for('index'))
     return render_template('register.html', form=form)
+
+@app.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        return redirect(url_for('index'))
+        
+    if current_user.confirm(token):
+        flash('You have confirmed your account. Thanks!')
+    else:
+        flash('The confirmation link is invalid or has expired.')
+    return redirect(url_for('index'))
