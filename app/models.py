@@ -47,6 +47,13 @@ class Role(db.Model):
             db.session.add(role)
         db.session.commit()
 
+class Follow(db.Model):
+    follower_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                            primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                            primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
@@ -55,7 +62,16 @@ class User(UserMixin, db.Model):
     confirmed = db.Column(db.Boolean, default=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     post = db.relationship('Post', backref='author', lazy='dynamic')
-
+    followed = db.relationship('Follow',
+                                foreign_keys=[Follow.follower_id],
+                                backref=db.backref('follower', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
+    followers = db.relationship('Follow',
+                                foreign_keys=[Follow.followed_id],
+                                backref=db.backref('followed', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -67,6 +83,26 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(permissions=0xff).first()
             else:
                 self.role = Role.query.filter_by(default=True).first()
+
+    def follow(self, user):
+        if not self.is_following(user):
+            f = Follow(follower=self, followed=user)
+            db.session.add(f)
+            db.session.commit()
+
+    def unfollow(self, user):
+        f = self.followed.filter_by(followed_id=user.id).first()
+        if f:
+            db.session.delete(f)            
+            db.session.commit()
+
+    def is_following(self, user):
+        return self.followed.filter_by(
+            followed_id=user.id).first() is not None
+
+    def is_followed_by(self, user):
+        return self.followers.filter_by(
+            follower_id=user.id).first() is not None
 
     # def generate_confirmation_token(self, expiration=3600):
     #     s = Serializer(current_app.config['SECRET_KEY'], expiration)
