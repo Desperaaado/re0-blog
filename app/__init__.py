@@ -27,6 +27,8 @@ app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['RE0BLOG_MAIL_SUBJECT_PREFIX'] = '[Re0-Blog]'
 app.config['RE0BLOG_MAIL_SENDER'] = \
     f"Re0-Blog Admin <{app.config['MAIL_USERNAME']}>"
+app.config['WTF_CSRF_ENABLED'] = False #!! test only
+app.config['SERVER_NAME'] = '127.0.0.1:5000'
 
 # ext init:
 db = SQLAlchemy(app)
