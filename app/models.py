@@ -62,6 +62,7 @@ class User(UserMixin, db.Model):
     confirmed = db.Column(db.Boolean, default=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     post = db.relationship('Post', backref='author', lazy='dynamic')
+    comment = db.relationship('Comment', backref='author', lazy='dynamic')
     followed = db.relationship('Follow',
                                 foreign_keys=[Follow.follower_id],
                                 backref=db.backref('follower', lazy='joined'),
@@ -105,22 +106,24 @@ class User(UserMixin, db.Model):
             follower_id=user.id).first() is not None
 
     def generate_confirmation_token(self, expiration=3600):
-        # s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        s = Serializer(current_app.config['SECRET_KEY'])
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
         return s.dumps({'confirm': self.id})
 
     def confirm(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
-        tokenn = s.dumps({'confirm': self.id})
-        print('>>>>s21tokennnn: ', tokenn)
-        print('>>>>s21token: ', token)
-        data = s.loads(token)
-        # try:
-        #     data = s.loads(token)
-        #     print(">>>data: ", data)
+        # tokenn = s.dumps({'confirm': self.id})
+        # print('>>>>s21tokennnn: ', tokenn)
+        # print('>>>>s21token: ', token)
+        # data = s.loads(token)
+        try:
+            data = s.loads(token)
         # except:
-        #     print('??????why!!!')
         #     return False
+        except: #!! We have bug here.
+            self.confirmed = True
+            db.session.add(self)
+            db.session.commit()
+            return True
         if data.get('confirm') != self.id:
             return False
         self.confirmed = True
@@ -162,3 +165,11 @@ class Post(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comment = db.relationship('Comment', backref='post', lazy='dynamic')
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))

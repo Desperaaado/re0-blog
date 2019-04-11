@@ -53,3 +53,7 @@ class RegistrationForm(FlaskForm):
 class PostForm(FlaskForm):
     body = TextAreaField("What's on your mind?", validators=[Required()])
     submit = SubmitField('Submit')
+
+class CommentForm(FlaskForm):
+    body = StringField('', validators=[Required()])
+    submit = SubmitField('Submit')
